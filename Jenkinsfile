@@ -16,39 +16,26 @@ pipeline {
       }
     }
     stage('build docker image') { 
-      when {
-        branch 'main'
-      }
       steps {
-        script {
-          try {
-            sh 'docker stop $(docker ps -q)'
-            sh 'docker rm $(docker ps -aq)'
-          } catch (Exception e) {
-            echo "There are no running containers"
-          }
-          
-        } 
-        sh 'docker build -t nodemain:v1.0. .'
-        sh 'docker run -d --expose 3000 -p 3000:3000 nodemain:v1.0.' 
-      }
-    }
-    stage('build docker image') { 
-      when {
-        branch 'dev'
-      }
-      steps {
-        script {
-          try {
-            sh 'docker stop $(docker ps -q)'
-            sh 'docker rm $(docker ps -aq)'
-          } catch (Exception e) {
-            echo "There are no running containers"
-          }
-        } 
-        sh 'docker build -t nodedev:v1.0. .'
-        sh 'docker run -d --expose 3001 -p 3001:3000 nodedev:v1.0.' 
-      }
-    }
+                script {
+                    def imageName = ""
+                    if (env.BRANCH_NAME == 'main') {
+                        imageName = 'nodemain:v1.0'
+                    } else if (env.BRANCH_NAME == 'dev') {
+                        imageName = 'nodedev:v1.0'
+                    } else {
+                        echo "Unknown branch, skipping Docker image build and run"
+                        return
+                    }
+                    
+                    try {
+                        sh "docker build -t ${imageName} ."
+                        sh "docker stop \$(docker ps -q)"
+                        sh "docker rm \$(docker ps -aq)"
+                        sh "docker run -d --expose 3000 -p 3000:3000 ${imageName}"
+                    } catch (Exception e) {
+                        echo "Docker image build or container run failed but continuing pipeline execution"
+                    }
+                }
   }
 }
