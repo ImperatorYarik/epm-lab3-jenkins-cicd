@@ -21,8 +21,7 @@ pipeline {
           sh "docker build -t node${env.BRANCH_NAME}:v1.0. ."
           if (env.BRANCH_NAME == 'main') {
             try {
-              container_id=sh "docker ps --filter \"ancestor=nodemain:v.1.0.\" --format \"{{.ID}}\""
-              sh "docker rm -f $container_id"
+              sh "docker rm -f $(docker ps -aq)"
             } catch (Exception e) {
               echo 'No running docker containers, continue pipline'
             }
