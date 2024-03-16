@@ -21,12 +21,15 @@ pipeline {
           def runningContainers = sh(script: 'docker ps -q', returnStdout: true).trim()
 
                     if (runningContainers) {
-                        sh 'docker stop ${runningContainers}'
+                        sh "docker stop ${runningContainers}"
 
                         sleep time: 5, unit: 'SECONDS'
 
                         sh 'docker rm $(docker ps -aq)'
+                    } else {
+                        echo "No running containers found. Skipping cleanup."
                     }
+
         }
         sh 'docker build -t nodemain:v1.0. .'
         sh 'docker run -d --expose 3000 -p 3000:3000 nodemain:v1.0.' 
