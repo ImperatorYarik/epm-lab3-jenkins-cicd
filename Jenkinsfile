@@ -18,12 +18,11 @@ pipeline {
     stage('build docker image') { 
       steps { 
         script {
-          def runningContainers = sh(script: 'docker ps -q', returnStdout: true).trim()
+          def runningContainers = sh(script: 'docker ps -aq', returnStdout: true).trim()
 
                     if (runningContainers) {
                         sh "docker stop ${runningContainers}"
 
-                        sleep time: 5, unit: 'SECONDS'
 
                         sh 'docker rm $(docker ps -aq)'
                     } else {
