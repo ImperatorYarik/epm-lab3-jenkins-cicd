@@ -17,7 +17,7 @@ pipeline {
     }
     stage('build docker image') { 
       steps {
-                script {
+        script {
                     def imageName = ""
                     if (env.BRANCH_NAME == 'main') {
                         imageName = 'nodemain:v1.0'
@@ -37,5 +37,7 @@ pipeline {
                         echo "Docker image build or container run failed but continuing pipeline execution"
                     }
                 }
+      }
+    }    
   }
 }
