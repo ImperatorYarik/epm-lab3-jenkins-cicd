@@ -19,10 +19,11 @@ pipeline {
       steps {
         script {
           sh "docker build -t node${env.BRANCH_NAME}:v1.0. ."
-          try {
-            sh 'docker rm -f $(docker ps --filter "ancestor=node${env.BRANCH_NAME}:v1.0." --format "{{.ID}}")'
-          } catch (Exception e) {
-            echo "Docker container doesent exist, continuing pipeline execution"
+          def containerIds = sh(script: 'docker ps --filter "ancestor=node${env.BRANCH_NAME}:v1.0" --format "{{.ID}}"', returnStdout: true).trim()
+          if (containerIds) {
+              sh "docker rm -f ${containerIds}"
+          } else {
+              echo "No running containers found for node${env.BRANCH_NAME}:v1.0, continuing pipeline execution"
           }
           if (env.BRANCH_NAME == 'main') {
             sh "docker run -d --expose 3000 -p 3000:3000 nodemain:v1.0."
