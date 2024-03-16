@@ -22,9 +22,6 @@ pipeline {
 
                     if (runningContainers) {
                         sh "docker stop ${runningContainers}"
-
-                        sleep time: 5, unit: 'SECONDS'
-
                         sh 'docker rm $(docker ps -aq)'
                     } else {
                         echo "No running containers found. Skipping cleanup."
