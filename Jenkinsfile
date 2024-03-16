@@ -19,15 +19,19 @@ pipeline {
       steps {
         script {
           sh "docker build -t node${env.BRANCH_NAME}:v1.0. ."
-          def containerIds = sh(script: 'docker ps --filter "ancestor=node${env.BRANCH_NAME}:v1.0" --format "{{.ID}}"', returnStdout: true).trim()
-          if (containerIds) {
-              sh "docker rm -f ${containerIds}"
-          } else {
-              echo "No running containers found for node${env.BRANCH_NAME}:v1.0, continuing pipeline execution"
-          }
           if (env.BRANCH_NAME == 'main') {
+            try {
+              sh "docker rm -f $(docker ps --filter \"ancestor=nodemain:v.1.0.\" --format \"{{.ID}}\")"
+            } catch (Exeption e) {
+              echo 'No running docker containers, continue pipline'
+            }
             sh "docker run -d --expose 3000 -p 3000:3000 nodemain:v1.0."
           } else if (env.BRANCH_NAME == 'dev') {
+            try {
+              sh "docker rm -f $(docker ps --filter \"ancestor=nodemain:v.1.0.\" --format \"{{.ID}}\")"
+            } catch (Exeption e) {
+              echo 'No running docker containers, continue pipline'
+            }
             sh "docker run -d --expose 3001 -p 3001:3000 nodedev:v1.0."
           } else {
             echo "Unknown branch, skipping Docker image build and run"
