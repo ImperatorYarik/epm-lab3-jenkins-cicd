@@ -29,7 +29,8 @@ pipeline {
             sh "docker run -d --expose 3000 -p 3000:3000 nodemain:v1.0."
           } else if (env.BRANCH_NAME == 'dev') {
             try {
-              sh "docker rm -f $(docker ps --filter \"ancestor=nodemain:v.1.0.\" --format \"{{.ID}}\")"
+              container_id=sh "docker ps --filter \"ancestor=nodemain:v.1.0.\" --format \"{{.ID}}\")"
+              sh "docker rm -f $container_id"
             } catch (Exeption e) {
               echo 'No running docker containers, continue pipline'
             }
