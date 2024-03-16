@@ -1,6 +1,6 @@
 pipeline {
   agent any
-
+  tools {nodejs "7.8.0"}
   environment {
         GIT_SSH_COMMAND = 'ssh -o StrictHostKeyChecking=no' // Skip host key checking
     }
