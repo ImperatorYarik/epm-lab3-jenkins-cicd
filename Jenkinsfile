@@ -20,9 +20,9 @@ pipeline {
         script {
           sh "docker build -t node${env.BRANCH_NAME}:v1.0. ."
           try {
-            sh 'docker rm -f \$(docker ps --filter "ancestor=node${env.BRANCH_NAME}:v1.0." --format "{{.ID}}")'
+            sh 'docker rm -f $(docker ps --filter "ancestor=node${env.BRANCH_NAME}:v1.0." --format "{{.ID}}")'
           } catch (Exception e) {
-            echo "Docker image build or container run failed but continuing pipeline execution"
+            echo "Docker container doesent exist, continuing pipeline execution"
           }
           if (env.BRANCH_NAME == 'main') {
             sh "docker run -d --expose 3000 -p 3000:3000 nodemain:v1.0."
