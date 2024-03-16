@@ -17,9 +17,9 @@ pipeline {
     }
     stage('build docker image') { 
       steps { 
-        docker build -t nodedev:v1.0.
+        docker build -t "nodedev:v1.0." . 
         docker rm -f $(docker ps -aq)
-        docker run -d --expose 3001 -p 3001:3000 nodedev:v1.0.
+        docker run -d --expose 3001 -p 3001:3000 "nodedev:v1.0."
       }
     }
   }
