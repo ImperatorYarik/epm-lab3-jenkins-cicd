@@ -16,20 +16,38 @@ pipeline {
       }
     }
     stage('build docker image') { 
-      steps { 
+      when {
+        branch 'main'
+      }
+      steps {
         script {
-          def runningContainers = sh(script: 'docker ps -q', returnStdout: true).trim()
-
-                    if (runningContainers) {
-                        sh "docker stop ${runningContainers}"
-                        sh 'docker rm $(docker ps -aq)'
-                    } else {
-                        echo "No running containers found. Skipping cleanup."
-                    }
-
-        }
+          try {
+            sh 'docker stop $(docker ps -q)'
+            sh 'docker rm $(docker ps -aq)'
+          } catch (Exception e) {
+            echo "There are no running containers"
+          }
+          
+        } 
         sh 'docker build -t nodemain:v1.0. .'
         sh 'docker run -d --expose 3000 -p 3000:3000 nodemain:v1.0.' 
+      }
+    }
+    stage('build docker image') { 
+      when {
+        branch 'dev'
+      }
+      steps {
+        script {
+          try {
+            sh 'docker stop $(docker ps -q)'
+            sh 'docker rm $(docker ps -aq)'
+          } catch (Exception e) {
+            echo "There are no running containers"
+          }
+        } 
+        sh 'docker build -t nodedev:v1.0. .'
+        sh 'docker run -d --expose 3001 -p 3001:3000 nodedev:v1.0.' 
       }
     }
   }
