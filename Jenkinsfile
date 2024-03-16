@@ -17,10 +17,14 @@ pipeline {
     }
     stage('build docker image') { 
       steps { 
+        script {
+          if [ "$(docker ps -q)" ]; then
+              docker stop $(docker ps -q)              
+              docker rm $(docker ps -aq)
+          fi
+        }
         sh 'docker build -t nodemain:v1.0. .'
         sh 'docker run -d --expose 3000 -p 3000:3000 nodemain:v1.0.' 
-        sleep 60
-        sh 'if ["$(docker ps -aq)"]; then docker rm -f $(docker ps -aq); fi' 
       }
     }
   }
