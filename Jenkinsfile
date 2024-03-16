@@ -1,5 +1,9 @@
 pipeline {
   agent any
+
+  environment {
+        GIT_SSH_COMMAND = 'ssh -o StrictHostKeyChecking=no' // Skip host key checking
+    }
   stages {
     stage('checkout') {
       steps {
