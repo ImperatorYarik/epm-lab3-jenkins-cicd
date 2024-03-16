@@ -20,7 +20,7 @@ pipeline {
         script {
           sh "docker build -t node${env.BRANCH_NAME}:v1.0. ."
           try {
-            sh "docker rm -f \$(docker ps --filter "ancestor=node${env.BRANCH_NAME}:v1.0." --format "{{.ID}}")"
+            sh "docker rm -f \$(docker ps --filter ancestor=node${env.BRANCH_NAME}:v1.0  --format {{.ID}})"
           } catch (Exception e) {
             echo "Docker image build or container run failed but continuing pipeline execution"
           }
