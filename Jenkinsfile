@@ -18,10 +18,15 @@ pipeline {
     stage('build docker image') { 
       steps { 
         script {
-          if [ "$(docker ps -q)" ]; then
-              docker stop $(docker ps -q)              
-              docker rm $(docker ps -aq)
-          fi
+          def runningContainers = sh(script: 'docker ps -q', returnStdout: true).trim()
+
+                    if (runningContainers) {
+                        sh 'docker stop ${runningContainers}'
+
+                        sleep time: 5, unit: 'SECONDS'
+
+                        sh 'docker rm $(docker ps -aq)'
+                    }
         }
         sh 'docker build -t nodemain:v1.0. .'
         sh 'docker run -d --expose 3000 -p 3000:3000 nodemain:v1.0.' 
