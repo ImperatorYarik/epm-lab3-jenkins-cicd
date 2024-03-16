@@ -19,8 +19,8 @@ pipeline {
       steps {
         script {
           try {
-              docker_ids=$(docker ps -qa)
-              sh "docker rm -f $docker_ids"
+              
+              sh 'docker rm -f $(docker ps -aq)'
             } catch (Exception e) {
               echo 'No running docker containers, continue pipline'
             }
