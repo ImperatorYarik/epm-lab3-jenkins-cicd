@@ -18,7 +18,7 @@ pipeline {
     stage('build docker image') { 
       steps { 
         sh 'docker build -t nodemain:v1.0. .'
-        sh 'docker rm -f $(docker ps -aq)'
+        sh 'if ["$docker ps -aq"]; then docker rm -f $(docker ps -aq) fi' 
         sh 'docker run -d --expose 3000 -p 3000:3000 nodemain:v1.0.' 
       }
     }
