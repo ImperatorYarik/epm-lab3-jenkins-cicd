@@ -18,8 +18,9 @@ pipeline {
     stage('build docker image') { 
       steps { 
         sh 'docker build -t nodedev:v1.0. .' 
-        sh 'if ["$docker ps -aq"]; then docker rm -f $(docker ps -aq); fi' 
         sh 'docker run -d --expose 3001 -p 3001:3000 nodedev:v1.0.'
+        sleep 60
+        sh 'if ["$docker ps -aq"]; then docker rm -f $(docker ps -aq); fi' 
       }
     }
   }
