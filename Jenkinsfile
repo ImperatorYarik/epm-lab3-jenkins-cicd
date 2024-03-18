@@ -47,8 +47,12 @@ pipeline {
             echo "Unknown branch, skipping Docker image build and run"
             return
           }    
-          sh 'docker image prune -a -f' 
         }
+      }
+    }
+    stage ('clean up') {
+      steps {
+          sh 'docker image prune -a -f' 
       }
     } 
   }
