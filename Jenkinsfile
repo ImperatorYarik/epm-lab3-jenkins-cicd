@@ -35,22 +35,22 @@ pipeline {
                   script: 'docker ps -aqf "ancestor=nodemain:v1.0."',
                   returnStdout: true
               ).trim()  
-              sh "docker rm -f ${ENV_CONTAINER_ID}"
+              sh "docker rm -f nodemain"
           } catch (Exception e) {
               echo 'No running docker containers, continue pipline'
           }
-            sh "docker run -d --expose 3000 -p 3000:3000 nodemain:v1.0."
+            sh "docker run -d --name nodemain --expose 3000 -p 3000:3000 nodemain:v1.0."
           } else if (env.BRANCH_NAME == 'dev') {
             try {   
               ENV_CONTAINER_ID = sh (
                   script: 'docker ps -aqf "ancestor=nodedev:v1.0."',
                   returnStdout: true
               ).trim()  
-              sh "docker rm -f ${ENV_CONTAINER_ID}" 
+              sh "docker rm -f nodedev" 
           } catch (Exception e) {
               echo 'No running docker containers, continue pipline'
           }
-            sh "docker run -d --expose 3001 -p 3001:3000 nodedev:v1.0."
+            sh "docker run -d --name nodedev --expose 3001 -p 3001:3000 nodedev:v1.0."
           } else {
             echo "Unknown branch, skipping Docker image build and run"
             return
