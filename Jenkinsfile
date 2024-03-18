@@ -34,7 +34,7 @@ pipeline {
               ENV_CONTAINER_ID = sh (
                   script: 'docker ps -aqf "ancestor=nodemain:v1.0."',
                   returnStatus: true
-              ) == 0    
+              ).trim()  
               sh "docker rm -f ${ENV_CONTAINER_ID}"
           } catch (Exception e) {
               echo 'No running docker containers, continue pipline'
