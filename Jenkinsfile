@@ -43,9 +43,9 @@ pipeline {
           } else if (env.BRANCH_NAME == 'dev') {
             try {   
               ENV_CONTAINER_ID = sh (
-                  script: 'docker ps -aqf "ancestor=nodedev:v1.0."',
-                  returnStatus: true
-              ) == 0    
+                  script: 'docker ps -aqf "ancestor=nodemain:v1.0."',
+                  returnStdout: true
+              ).trim()  
               sh "docker rm -f ${ENV_CONTAINER_ID}" 
           } catch (Exception e) {
               echo 'No running docker containers, continue pipline'
