@@ -47,7 +47,7 @@ pipeline {
             echo "Unknown branch, skipping Docker image build and run"
             return
           }    
-          sh 'docker imge prune -a' 
+          sh 'docker image prune -a' 
         }
       }
     } 
