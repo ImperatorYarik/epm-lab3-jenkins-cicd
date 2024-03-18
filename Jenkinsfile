@@ -15,29 +15,40 @@ pipeline {
         sh 'npm test'
       }
     }
-    stage('build docker image') { 
+    stage('docker build') { 
       steps {
         script {
-          try {
-              
-              sh 'docker rm -f $(docker ps -aq)'
-            } catch (Exception e) {
-              echo 'No running docker containers, continue pipline'
-            }
+          
           sh "docker build -t node${env.BRANCH_NAME}:v1.0. ."
+               
+          
+        }
+      }
+    } 
+    stage ('deploy')  {
+      steps {
+        script {
+          
           if (env.BRANCH_NAME == 'main') {
-            
+            try {    
+              sh 'docker rm -f $(docker ps -aqf "ancestor=nodemain:v1.0.")'
+          } catch (Exception e) {
+              echo 'No running docker containers, continue pipline'
+          }
             sh "docker run -d --expose 3000 -p 3000:3000 nodemain:v1.0."
           } else if (env.BRANCH_NAME == 'dev') {
-    
+            try {    
+              sh 'docker rm -f $(docker ps -aqf "ancestor=nodedev:v1.0.")'
+          } catch (Exception e) {
+              echo 'No running docker containers, continue pipline'
+          }
             sh "docker run -d --expose 3001 -p 3001:3000 nodedev:v1.0."
           } else {
             echo "Unknown branch, skipping Docker image build and run"
             return
-          }          
-          
+          }     
         }
       }
-    }    
+    } 
   }
 }
