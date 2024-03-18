@@ -18,7 +18,7 @@ pipeline {
     stage('docker build') { 
       steps {
         script {
-          
+          sh "docker rmi -f node${env.BRANCH_NAME}:v1.0."
           sh "docker build -t node${env.BRANCH_NAME}:v1.0. ."
                
           
