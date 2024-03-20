@@ -1,0 +1,27 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('build image') { 
+      steps { 
+        sh "docker build -t node${env.ENV}:${env.tag} ."
+      }
+    }
+    stage('cleanup') { 
+      steps { 
+        sh "docker stop node${env.ENV}"
+      }
+    }
+    stage('deploy') { 
+      steps {
+        script {
+          
+          sh "docker run -d --rm --name node${env.ENV} node${env.ENV}:${env.tag}"
+               
+          
+        }
+      }
+    } 
+    
+  }
+}
