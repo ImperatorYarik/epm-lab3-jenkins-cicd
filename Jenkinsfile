@@ -8,10 +8,9 @@ pipeline {
     stage('build') { 
       agent { 
         docker {
-          image node:7.8.0
+          image 'node:7.8.0'
           reuseNode true
         }
-        
       }
       steps { 
         sh 'npm install'
