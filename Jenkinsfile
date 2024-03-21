@@ -9,7 +9,7 @@ pipeline {
       agent { 
         docker {
           image 'node:7.8.0'
-          user 'root'
+          args '-u root:sudo'
           reuseNode true
         }
       }
