@@ -40,8 +40,7 @@ pipeline {
     stage('Scan Docker image for Vulnerabilities') {
       steps {
         script {
-          def vulnerabilities = sh(script: "trivy --exit-code 0 --severity HIGH,MEDIUM,LOW --no-progress
-          exzenter/node${env.BRANCH_NAME}:v1.0", returnStdout: true).trim()
+          def vulnerabilities = sh(script: "trivy --exit-code 0 --severity HIGH,MEDIUM,LOW --no-progress exzenter/node${env.BRANCH_NAME}:v1.0", returnStdout: true).trim()
           echo "vulnerability report:\n${vulnerabilities}"
         }
       }
