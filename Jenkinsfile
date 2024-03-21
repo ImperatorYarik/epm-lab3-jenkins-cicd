@@ -29,7 +29,7 @@ pipeline {
       steps {
         withDockerRegistry([ credentialsId: "cee60763-306e-451d-b3ce-d1ae992be316", url: "" ]) {
           sh "docker push exzenter/node${env.BRANCH_NAME}:v1.0"
-          
+        }
         script {
           
           if (env.BRANCH_NAME == 'main') {
