@@ -18,15 +18,18 @@ pipeline {
     stage('docker build') { 
       steps {
         script {
-          sh "docker rmi -f node${env.BRANCH_NAME}:v1.0."
-          sh "docker build -t node${env.BRANCH_NAME}:v1.0. ."
-               
+          sh "docker rmi -f node${env.BRANCH_NAME}:v1.0"
+          sh "docker build -t node${env.BRANCH_NAME}:v1.0 ."
+          sh "docker tag node${env.BRANCH_NAME} exenter/node${env.BRANCH_NAME}:v1.0"
           
         }
       }
     } 
-    stage ('deploy')  {
+    stage ('push')  {
       steps {
+        withDockerRegistry([ credentialsId: "cee60763-306e-451d-b3ce-d1ae992be316", url: "" ]) {
+          sh "docker push exzenter/node${env.BRANCH_NAME}:v1.0"
+          
         script {
           
           if (env.BRANCH_NAME == 'main') {
