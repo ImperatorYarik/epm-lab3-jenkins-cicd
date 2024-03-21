@@ -20,7 +20,7 @@ pipeline {
         script {
           sh "docker rmi -f node${env.BRANCH_NAME}:v1.0"
           sh "docker build -t node${env.BRANCH_NAME}:v1.0 ."
-          sh "docker tag node${env.BRANCH_NAME}:v1.0 exenter/node${env.BRANCH_NAME}:v1.0"
+          sh "docker tag node${env.BRANCH_NAME}:v1.0 exenter/node${env.BRANCH_NAME}"
           
         }
       }
