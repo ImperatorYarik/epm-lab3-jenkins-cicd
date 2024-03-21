@@ -19,7 +19,11 @@ pipeline {
     }
     stage('test') { 
       agent {
-        label 'reuse'
+        docker {
+          image 'node:7.8.0'
+          args '-u root:sudo'
+          reuseNode true
+        }
       }
       steps { 
         
