@@ -13,7 +13,7 @@ pipeline {
         }
       }
       steps { 
-        sh 'npm install'
+        sh 'sudo npm install'
       }
     }
     stage('test') { 
@@ -21,7 +21,7 @@ pipeline {
         label 'reuse'
       }
       steps { 
-        sh 'npm test'
+        sh 'sudo npm test'
       }
     }
     stage('test Dockerfile by Hadolint') {
