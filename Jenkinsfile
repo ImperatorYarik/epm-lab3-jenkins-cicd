@@ -3,18 +3,17 @@ pipeline {
 
   environment {
         GIT_SSH_COMMAND = 'ssh -o StrictHostKeyChecking=no' // Skip host key checking
-        npm_config_cache = "${WORKSPACE}/.npm"
     }
   stages {
     stage('build') { 
       agent { 
         docker {
           image 'node:7.8.0'
+          user 'root'
           reuseNode true
         }
       }
       steps { 
-        sh 'npm config set cache ${npm_config_cache}'
         sh 'npm install'
       }
     }
