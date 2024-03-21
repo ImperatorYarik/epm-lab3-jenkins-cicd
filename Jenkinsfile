@@ -18,8 +18,7 @@ pipeline {
     stage('docker build') { 
       steps {
         script {
-          sh "docker rmi -f node${env.BRANCH_NAME}:v1.0"
-          sh "docker build -t node${env.BRANCH_NAME}:v1.0 ."
+          sh "docker build -t exzenter/node${env.BRANCH_NAME}:v1.0 ."
           
         }
       }
@@ -27,7 +26,7 @@ pipeline {
     stage ('push')  {
       steps {
         withDockerRegistry([ credentialsId: "cee60763-306e-451d-b3ce-d1ae992be316", url: "" ]) {
-          sh "docker push node${env.BRANCH_NAME}:v1.0"
+          sh "docker push exzenter/node${env.BRANCH_NAME}:v1.0"
         }
         script {
           
@@ -37,14 +36,14 @@ pipeline {
           } catch (Exception e) {
               echo 'No running docker containers, continue pipline'
           }
-            sh "docker run -d --name nodemain --expose 3000 -p 3000:3000 nodemain:v1.0"
+            sh "docker run -d --name nodemain --expose 3000 -p 3000:3000 exzenter/nodemain:v1.0"
           } else if (env.BRANCH_NAME == 'dev') {
             try {     
               sh "docker rm -f nodedev" 
           } catch (Exception e) {
               echo 'No running docker containers, continue pipline'
           }
-            sh "docker run -d --name nodedev --expose 3001 -p 3001:3000 nodedev:v1.0"
+            sh "docker run -d --name nodedev --expose 3001 -p 3001:3000 exzenter/nodedev:v1.0"
           } else {
             echo "Unknown branch, skipping Docker image build and run"
             return
