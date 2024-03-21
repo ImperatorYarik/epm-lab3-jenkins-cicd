@@ -9,11 +9,13 @@ pipeline {
       agent { 
         docker {
           image 'node:7.8.0'
+          args '-v /var/run/docker.sock:/var/run/docker.sock' 
+          user 'root'
           reuseNode true
         }
       }
       steps { 
-        sh 'sudo npm install'
+        sh 'npm install'
       }
     }
     stage('test') { 
@@ -21,7 +23,7 @@ pipeline {
         label 'reuse'
       }
       steps { 
-        sh 'sudo npm test'
+        sh 'npm test'
       }
     }
     stage('test Dockerfile by Hadolint') {
