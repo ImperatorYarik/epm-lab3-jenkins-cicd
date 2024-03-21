@@ -6,10 +6,13 @@ pipeline {
     }
   stages {
     stage('build') { 
-      agent {
-        image node:7.8.0
-        reuseNode true
+      agent { 
+        docker {
+          image node:7.8.0
+          reuseNode true
         }
+        
+      }
       steps { 
         sh 'npm install'
       }
