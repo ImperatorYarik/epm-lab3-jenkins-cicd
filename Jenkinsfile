@@ -27,7 +27,7 @@ pipeline {
     stage ('push')  {
       steps {
         withDockerRegistry([ credentialsId: "cee60763-306e-451d-b3ce-d1ae992be316", url: "" ]) {
-          sh "docker push exzenter/node${env.BRANCH_NAME}:v1.0"
+          sh "docker push node${env.BRANCH_NAME}:v1.0"
         }
         script {
           
