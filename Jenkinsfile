@@ -3,6 +3,7 @@ pipeline {
 
   environment {
         GIT_SSH_COMMAND = 'ssh -o StrictHostKeyChecking=no' // Skip host key checking
+        npm_config_cache = "${WORKSPACE}/.npm"
     }
   stages {
     stage('build') { 
@@ -13,6 +14,7 @@ pipeline {
         }
       }
       steps { 
+        sh 'npm config set cache ${npm_config_cache}'
         sh 'npm install'
       }
     }
@@ -21,6 +23,7 @@ pipeline {
         label 'reuse'
       }
       steps { 
+        
         sh 'npm test'
       }
     }
